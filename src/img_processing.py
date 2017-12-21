@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 
 import rospy
-from std_msgs.msg import String
 from sensor_msgs.msg import CompressedImage
 from sensor_msgs.msg import Image
 from kati.msg import ImgInfo
 import cv2
 import numpy as np
-from cv_bridge import CvBridge, CvBridgeError
 
 
 def callback(msg,pub):
@@ -30,7 +28,7 @@ def listener():
     # anonymous=True flag means that rospy will choose a unique
     # name for our 'listener' node so that multiple listeners can
     # run simultaneously.
-    rospy.init_node('img_listener', anonymous=True)
+    rospy.init_node('img_processing', anonymous=True)
     pub = rospy.Publisher('img_info', ImgInfo, queue_size=10)
 
     rospy.Subscriber('/raspicam_node/image/compressed', CompressedImage, callback,pub)

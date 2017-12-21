@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 
 import rospy
-from std_msgs.msg import Float32
-from std_msgs.msg import String
 from kati.srv import *
+from kati.msg import SteeringCmds
 import RPi.GPIO as GPIO
-import time
 
 pins = []
 
