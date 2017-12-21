@@ -3,7 +3,7 @@
 import rospy
 from std_msgs.msg import Float32
 from std_msgs.msg import String
-from kati_pi.srv import *
+from kati.srv import *
 import RPi.GPIO as GPIO
 import time
 
