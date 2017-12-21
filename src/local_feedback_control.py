@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
-from std_msgs.msg import String
-from std_msgs.msg import Float32
+from kati.msg import Trajectorie
+from kati.msg import SteeringCmds
 import time
 
 def callback(data):
@@ -11,8 +11,8 @@ def local_feedback_control():
 
     # Init
     rospy.init_node('local_feedback_control', anonymous=True)
-    rospy.Subscriber('path',String, callback)
-    pub = rospy.Publisher('gpio_engine', Float32, queue_size=10)
+    rospy.Subscriber('trajectorie',Trajectorie, callback)
+    pub = rospy.Publisher('steering_cmds', SteeringCmds, queue_size=10)
 
     time.sleep(1)
     pub.publish(80)

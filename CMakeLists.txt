@@ -49,11 +49,13 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+ add_message_files(
+   FILES
+   ImgInfo.msg
+   MotionSpec.msg
+   SteeringCmds.msg
+   Trajectorie.msg
+ )
 
 ## Generate services in the 'srv' folder
  add_service_files(
@@ -107,7 +109,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES kati
-  CATKIN_DEPENDS roscpp rospy sensor_msgs std_msgs message_runtime
+  CATKIN_DEPENDS roscpp rospy sensor_msgs std_msgs message_runtime message_generation
 #  DEPENDS system_lib
 )
 

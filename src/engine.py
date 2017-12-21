@@ -10,7 +10,7 @@ import time
 pins = []
 
 
-def callback_pwm(data):
+def callback(data):
     global pins
     plf = pins[0]
     plb = pins[1]
@@ -60,7 +60,7 @@ def engine():
 
     rospy.Service('stop_engine', StopEngine, handle_stop_engine)
     rospy.Service('forward', Forward, handle_forward)
-    rospy.Subscriber('gpio_engine', Float32, callback_pwm)
+    rospy.Subscriber('steering_cmds', SteeringCmds,callback)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
