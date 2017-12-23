@@ -1,2 +1,3 @@
-int64 p1
+float32 throttle
+float32 curvature
 

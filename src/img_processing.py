@@ -22,12 +22,6 @@ def callback(msg,pub):
     # cv2.waitKey(0)
 
 def listener():
-
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
     rospy.init_node('img_processing', anonymous=True)
     pub = rospy.Publisher('img_info', ImgInfo, queue_size=10)
 

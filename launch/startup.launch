@@ -1,0 +1,10 @@
+<launch>
+
+    <node name="local_feedback_control" pkg="kati" type="local_feedback_control.py" />
+    <node name="motion_planning" pkg="kati" type="motion_planning.py" />
+    <node name="behavioral_layer" pkg="kati" type="behavioral_layer.py" />    
+    <node name="img_processing" pkg="kati" type="img_processing.py" />
+
+    <node name="rqt_graph" pkg="rqt_graph" type="rqt_graph" />
+
+</launch>

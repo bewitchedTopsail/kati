@@ -4,18 +4,77 @@ import rospy
 from kati.srv import *
 from kati.msg import SteeringCmds
 import RPi.GPIO as GPIO
+import numpy as np
 
 pins = []
+s = 10
+L = 2*11.5+2*2.5*np.pi
+T = 30
+v_max_l = 9*L/T
+v_max_r = 8*L/T
 
-
-def callback(data):
+def callback(steeringCmdMsg):
+    global s
     global pins
+    global v_max_l
+    global v_max_r
+    global v_max
+
+    v_des = steeringCmdMsg.throttle
+    curv_des = steeringCmdMsg.curvature
+    v_l = (1 - s * curv_des / 2) * v_des
+    v_r = (1 + s * curv_des / 2) * v_des
+    print "v_l des: " + str(v_l)
+    print "v_r des: " + str(v_r)
+
+    # Normieren auf v_max
+    v_l = v_l  / v_max_l * 100
+    v_r = v_r  / v_max_r * 100
+    print "v_l 0...100: " + str(v_l)
+    print "v_r 0...100: " + str(v_r)
+
+    v_max_des = np.maximum(v_r, v_l)
+    if v_max_des > 100:
+        v_r = v_r / v_max_des*100
+        v_l = v_l / v_max_des*100
+        print " speed to high for curve, reducing speed, v_max_des = " + str(v_max_des)
+
+    print "v_l 0...100: " + str(v_l)
+    print "v_r 0...100: " + str(v_r)
+
+
+
     plf = pins[0]
     plb = pins[1]
     prf = pins[2]
     prb = pins[3]
-    rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
-    plf.ChangeDutyCycle(data.data)
+    rospy.loginfo(rospy.get_caller_id() + 'I heard %s, %s', steeringCmdMsg.throttle, steeringCmdMsg.curvature)
+
+
+    if curv_des == 0:
+        if steeringCmdMsg.throttle > 0:
+            plf.ChangeDutyCycle(v_l)
+            prf.ChangeDutyCycle(v_r)
+            plb.ChangeDutyCycle(0)
+            prb.ChangeDutyCycle(0)
+        else:
+            plf.ChangeDutyCycle(0)
+            prf.ChangeDutyCycle(0)
+            plb.ChangeDutyCycle(-v_l)
+            prb.ChangeDutyCycle(-v_r)
+    elif curv_des < 0:
+        plf.ChangeDutyCycle(100)
+        prf.ChangeDutyCycle(0)
+        plb.ChangeDutyCycle(0)
+        prb.ChangeDutyCycle(100)
+    elif curv_des > 0:
+        plf.ChangeDutyCycle(0)
+        prf.ChangeDutyCycle(100)
+        plb.ChangeDutyCycle(100)
+        prb.ChangeDutyCycle(0)
+    else:
+
+        print  "No correct inputs"
 
 def handle_stop_engine(*arg):
     global pins
@@ -29,8 +88,8 @@ def handle_forward(data):
     global pins
     a = data.a
     print "Forward -> !"
-    pins[0].ChangeDutyCycle(a)
-    pins[2].ChangeDutyCycle(a)
+    pins[0].ChangeDutyCycle(50*9/8)
+    pins[2].ChangeDutyCycle(100)
     b = "Forward -> !"
     return b
 

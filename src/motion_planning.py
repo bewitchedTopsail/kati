@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import rospy
-from std_msgs.msg import String
 from kati.msg import Trajectorie
 from kati.msg import MotionSpec
 from kati.msg import ImgInfo
@@ -19,11 +18,11 @@ def callback_motion_spec(data, MotionPlaner):
 
 ## Callback new Img
 def callback_new_img(data, MotionPlaner):
-    msg = Trajectorie
+    msg = Trajectorie()
     if MotionPlaner.motion_spec == 'follow_lane':
-        msg.p1 = '1'
+        msg.p1 = 1
     else:
-        msg.p1 = '2'
+        msg.p1 = 2
         rospy.logdebug(rospy.get_caller_id() + " No valid MotionSpec! MotionSpec = %s", MotionPlaner.motion_spec )
     MotionPlaner.pub.publish(msg)
     rospy.loginfo(rospy.get_caller_id() + " Path =  %s , Motion Spec =  %s", msg.p1, MotionPlaner.motion_spec)

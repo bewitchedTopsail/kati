@@ -21,6 +21,3 @@ if __name__ == '__main__':
         pass
 
 
-
-# Maybe use state mache (Library smach) to in the behaviroal_layer
-# Then you can grab the acutal state (follow_lan, turn_left) with a service every time a new image arrives
